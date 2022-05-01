@@ -15,6 +15,12 @@ namespace Laboratorio11
         static List<Nota> NotasTemp = new List<Nota>();
         static List<Universidad> universidades = new List<Universidad>();
 
+        private void SaveJsonAlumnos()
+        {
+            string json = JsonConvert.SerializeObject(alumnoTemp);
+            string archivo = Server.MapPath("Alumnos.json");
+            System.IO.File.WriteAllText(archivo, json);
+        }
         private void SaveJsonUnivercity()
         {
             string json = JsonConvert.SerializeObject(universidades);   
@@ -29,6 +35,10 @@ namespace Laboratorio11
             jsonStream.Close();
 
             universidades = JsonConvert.DeserializeObject<List<Universidad>>(json);
+            if (universidades == null)
+            {
+                universidades = new List<Universidad>();
+            }
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -59,6 +69,7 @@ namespace Laboratorio11
             alumno.Notas = NotasTemp.ToArray().ToList();
 
             alumnoTemp.Add(alumno);
+            SaveJsonAlumnos();
             NotasTemp.Clear();
         }
 
